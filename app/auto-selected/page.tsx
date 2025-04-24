@@ -1,11 +1,14 @@
 'use client';
 
 import AutoSelectedpage from '@/components/AutoSelectedpage';
+import { Suspense } from 'react';
 
 export default function AutoSelected() {
   return (
     <main>
-      <AutoSelectedpage />
+      <Suspense fallback={<div>Loading...</div>}>
+        <AutoSelectedpage />
+      </Suspense>
     </main>
   );
 }
