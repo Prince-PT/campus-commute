@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 declare global {
   interface Window {
@@ -12,12 +12,12 @@ export const useLoadGoogleMaps = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    if (typeof window.google !== "undefined") {
+    if (typeof window.google !== 'undefined') {
       setIsLoaded(true);
       return;
     }
 
-    const script = document.createElement("script");
+    const script = document.createElement('script');
     script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
     script.async = true;
     script.defer = true;

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 interface AutocompleteInputProps {
   placeholder: string;
@@ -19,15 +19,12 @@ export const AutocompleteInput = ({
   useEffect(() => {
     if (!window.google || !inputRef.current) return;
 
-    autocompleteRef.current = new window.google.maps.places.Autocomplete(
-      inputRef.current,
-      {
-        types: ["establishment", "geocode"],
-        componentRestrictions: { country: "in" },
-      }
-    );
+    autocompleteRef.current = new window.google.maps.places.Autocomplete(inputRef.current, {
+      types: ['establishment', 'geocode'],
+      componentRestrictions: { country: 'in' },
+    });
 
-    autocompleteRef.current.addListener("place_changed", () => {
+    autocompleteRef.current.addListener('place_changed', () => {
       const place = autocompleteRef.current?.getPlace();
       if (place?.geometry) {
         onPlaceSelected(place);
@@ -36,9 +33,7 @@ export const AutocompleteInput = ({
 
     return () => {
       if (autocompleteRef.current) {
-        window.google.maps.event.clearInstanceListeners(
-          autocompleteRef.current
-        );
+        window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
       }
     };
   }, [onPlaceSelected]);

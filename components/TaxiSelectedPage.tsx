@@ -1,91 +1,85 @@
-import React from "react";
-import { useLoadGoogleMaps } from "@/hooks/useLoadGoogleMaps";
-import { useState } from "react";
-import { AutocompleteInput } from "@/components/AutocompleteInput";
-import Image from "next/image";
-import ImageWithOverlay from "@/components/ImageWithOverlay";
+import React from 'react';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import ImageWithOverlay from '@/components/ImageWithOverlay';
+import { useSearchParams } from 'next/navigation';
 
 const TaxiSelectedPage = () => {
-  const [fromPlace, setFromPlace] =
-    useState<google.maps.places.PlaceResult | null>(null);
-  const [toPlace, setToPlace] = useState<google.maps.places.PlaceResult | null>(
-    null
-  );
-  const [fare, setFare] = useState<string>("");
-  const isLoaded = useLoadGoogleMaps();
+  const [fromPlace, setFromPlace] = useState<string>('');
+  const [toPlace, setToPlace] = useState<string>('');
+  const [fare, setFare] = useState<string>('');
 
-  // Log the selected places
-  React.useEffect(() => {
+  // Get the URL search parameters
+  const searchParams = useSearchParams();
+
+  // Load the from and to values from URL parameters
+  useEffect(() => {
+    const fromParam = searchParams.get('from');
+    const toParam = searchParams.get('to');
+
+    if (fromParam) setFromPlace(fromParam);
+    if (toParam) setToPlace(toParam);
+  }, [searchParams]);
+
+  // Log the input values when they change
+  useEffect(() => {
     if (fromPlace) {
-      console.log("From place selected:", fromPlace);
+      console.log('From place entered:', fromPlace);
     }
     if (toPlace) {
-      console.log("To place selected:", toPlace);
+      console.log('To place entered:', toPlace);
     }
   }, [fromPlace, toPlace]);
 
   const handleFareChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFare(e.target.value);
-    console.log("Fare amount:", e.target.value);
+    console.log('Fare amount:', e.target.value);
   };
-
-  if (!isLoaded) {
-    return (
-      <div className="flex w-full h-screen items-center justify-center">
-        <p>Loading map services...</p>
-      </div>
-    );
-  }
 
   return (
     <div className="flex w-full h-screen">
       <div className="flex flex-col w-2/5 p-6 gap-4 bg-white">
-        <h1 className="text-3xl font-bold mb-6 text-black text-center">
-          Campus Commute
-        </h1>
-        <div className="items-center justify-center flex"> 
-            <Image
-              src="/taxi_icon.png"
-              width={70}
-              height={70}
-              alt="Taxi Icon"
-              className="ml-3"
-            />
-            <h1 className="text-2xl text-black ml-8">Taxi</h1>
+        <h1 className="text-3xl font-bold mb-6 text-black text-center">Campus Commute</h1>
+        <div className="flex items-center justify-center">
+          <Image src="/taxi_icon.png" width={70} height={70} alt="Taxi Icon" className="ml-3" />
+          <h1 className="text-2xl text-black ml-8">Taxi</h1>
         </div>
 
-        <AutocompleteInput
-          className="text-black"
+        {/* Simple text inputs with pre-filled values */}
+        <input
+          type="text"
+          className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black mb-4"
           placeholder="From"
-          onPlaceSelected={setFromPlace}
+          value={fromPlace}
+          onChange={e => setFromPlace(e.target.value)}
         />
-        <AutocompleteInput
-          className="text-black"
+        <input
+          type="text"
+          className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black mb-4"
           placeholder="To"
-          onPlaceSelected={setToPlace}
+          value={toPlace}
+          onChange={e => setToPlace(e.target.value)}
         />
-        
-        {/* Fare input with similar styling to AutocompleteInput */}
-        <div className="relative w-full">
+
+        {/* Fare input with similar styling */}
+        <div className="relative w-full mb-4">
           <input
             type="text"
-            className="w-full p-2 border border-gray-300 rounded text-black"
+            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
             placeholder="Fare (₹)"
             value={fare}
             onChange={handleFareChange}
           />
         </div>
-        
-        {/* Display selected locations if you want */}
-        {fromPlace && (
-          <p className="text-sm text-gray-600">From: {fromPlace.name}</p>
-        )}
-        {toPlace && <p className="text-sm text-gray-600">To: {toPlace.name}</p>}
-        
+
+        {/* Display entered locations */}
+        {fromPlace && <p className="text-sm text-gray-600">From: {fromPlace}</p>}
+        {toPlace && <p className="text-sm text-gray-600">To: {toPlace}</p>}
+
         {/* Book button */}
-        <button 
+        <button
           className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-          onClick={() => console.log("Booking taxi with fare:", fare)}
+          onClick={() => console.log('Booking taxi with fare:', fare)}
         >
           Book Taxi
         </button>

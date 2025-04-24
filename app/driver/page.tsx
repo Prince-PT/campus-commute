@@ -3,17 +3,17 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import Homepage from '@/components/Homepage';
+import DriverHomepage from '@/components/DriverHomepage';
 import LoginPage from '@/components/LoginPage';
 
-export default function Home() {
+export default function DriverPage() {
   const { isLoggedIn, userRole } = useAuth();
   const router = useRouter();
 
-  // Redirect driver to driver page if they somehow end up here
+  // Redirect passenger to main page if they somehow end up here
   useEffect(() => {
-    if (isLoggedIn && userRole === 'driver') {
-      router.push('/driver');
+    if (isLoggedIn && userRole === 'passenger') {
+      router.push('/');
     }
   }, [isLoggedIn, userRole, router]);
 
@@ -22,10 +22,10 @@ export default function Home() {
     return <LoginPage />;
   }
 
-  // Otherwise show passenger homepage
+  // Otherwise show driver homepage
   return (
     <main>
-      <Homepage />
+      <DriverHomepage />
     </main>
   );
 }

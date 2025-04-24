@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import AutoSelectedpage from "@/components/AutoSelectedpage";
+import AutoSelectedpage from '@/components/AutoSelectedpage';
 
 export default function AutoSelected() {
   return (
